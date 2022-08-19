@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseArrayPipe, Query } from '@nestjs/common';
 import { AlgorithmsService } from './algorithms.service';
 
 @Controller('algorithms')
@@ -23,11 +23,22 @@ export class AlgorithmsController {
     ];
   }
 
-  @Get('/histogram/:featureId/:numberOfBins ')
+  @Get('/histogram/:featureId/:numberOfBins')
   getHistogram(
     @Param('featureId') featureId: string,
     @Param('numberOfBins') numberOfBins: string,
   ) {
-    return this.algorithmsService.getHistogram(featureId, parseInt(numberOfBins, 10));
+    return this.algorithmsService.getHistogram(
+      featureId,
+      parseInt(numberOfBins, 10),
+    );
+  }
+
+  @Get('/descriptive-stats')
+  getDescriptiveStats(
+    @Query('featureIds', new ParseArrayPipe({ items: String, separator: ',' }))
+    featureIds: string[],
+  ) {
+    return this.algorithmsService.getDescriptiveStats(featureIds);
   }
 }

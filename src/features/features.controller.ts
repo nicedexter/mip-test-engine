@@ -7,11 +7,8 @@ export class FeaturesController {
 
   @Get('/metadata')
   async getFeatures() {
-    const data = await this.featuresService.getFeatures();
-    
-    return data
-      .split('\n')[0]
-      .split(',')
-      .map((h) => h.trim());
+    const { header } = await this.featuresService.getFeatures();
+
+    return header;
   }
 }
